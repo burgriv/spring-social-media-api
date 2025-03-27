@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.entity.Account;
 import com.example.exception.InvalidCredentialsException;
+import com.example.exception.UnauthorizedException;
 
 @Service
 public class AccountService {
@@ -20,10 +21,15 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public Account createAccount(Account account) throws AuthenticationException, InvalidCredentialsException {
+    public Account register(Account account) throws AuthenticationException, InvalidCredentialsException {
         if (account.getUsername().length() <= 0) throw new InvalidCredentialsException();
         if (account.getPassword().length() < 4) throw new InvalidCredentialsException();
         if (accountRepository.existsByUsername(account.getUsername())) throw new AuthenticationException();
         return accountRepository.save(account);
+    }
+
+    public Account login(Account account) throws UnauthorizedException {
+        if (!accountRepository.existsByUsernameAndPassword(account.getUsername(), account.getPassword())) throw new UnauthorizedException();
+        return accountRepository.findByUsername(account.getUsername());
     }
 }
