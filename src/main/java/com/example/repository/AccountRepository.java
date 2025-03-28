@@ -4,6 +4,9 @@ import org.springframework.stereotype.Repository;
 
 import com.example.entity.Account;
 
+/**
+ * AccountRepository manages the Account table in the database.
+ */
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Integer>{
     boolean existsByUsername(String username);
